@@ -1,0 +1,411 @@
+#include <stdbool.h>
+#include <stdlib.h>
+
+#define PLAYER_MOVE_X 5
+#define PLAYER_MOVE_Y 5
+
+#define PLAYER_WALL_OFFSET 2
+
+volatile int* PS2_ptr = (int*)0xFF200100;
+
+volatile int* LED_ptr = (int*)0xFF200000;
+
+volatile int* pixel_ctrl_ptr = (int*)0xFF203020;
+
+enum Direction {
+  UP,
+  DOWN,
+  LEFT,
+  RIGHT,
+  STILL,
+};
+
+enum Direction getDirection() {
+  // Read keyboard input
+  int PS2_data = *(PS2_ptr);
+
+  // Extract RVALID bit
+  int RVALID = PS2_data & 0x8000;
+
+  // If a key is pressed
+  if (RVALID) {
+    // Extract key data
+    int keyInput = PS2_data & 0xFF;
+
+    switch (keyInput) {
+      case (0x75):
+        return UP;
+      case (0x6B):
+        return LEFT;
+      case (0x74):
+        return RIGHT;
+      case (0x72):
+        return DOWN;
+      default:
+        return STILL;
+    }
+  }
+}
+
+volatile int pixel_buffer_start;  // global variable
+short int Buffer1[240][512];      // 240 rows, 512 (320 + padding) columns
+short int Buffer2[240][512];
+short int laserMatrix[240][320];
+// Function that swaps two numbers
+void swap(int* num1, int* num2) {
+  int temp = *num1;
+  *num1 = *num2;
+  *num2 = temp;
+}
+
+void plot_pixel(int x, int y, short int line_color) {
+  volatile short int* one_pixel_address;
+
+  one_pixel_address = pixel_buffer_start + (y << 10) + (x << 1);
+
+  *one_pixel_address = line_color;
+}
+// Function that clears the entire screen (fills it with black)
+void clear_screen() {
+  for (int x = 0; x < 320; x++) {
+    for (int y = 0; y < 240; y++) {
+      plot_pixel(x, y, 0x0);
+    }
+  }
+}
+
+int absVal(int input) {
+  if (input < 0) {
+    input *= -1;
+  }
+
+  return input;
+}
+
+// Function that draws a line from one given point to another in a given color
+void draw_line(int x0, int y0, int x1, int y1, short int line_color) {
+  bool is_steep = absVal(y1 - y0) > absVal(x1 - x0);
+
+  if (is_steep) {
+    swap(&x0, &y0);
+    swap(&x1, &y1);
+  }
+
+  if (x0 > x1) {
+    swap(&x0, &x1);
+    swap(&y0, &y1);
+  }
+
+  int deltaX = x1 - x0;
+  int deltaY = absVal(y1 - y0);
+
+  int error = -(deltaX / 2);
+  int y = y0;
+
+  int y_step;
+
+  if (y0 < y1) {
+    y_step = 1;
+  } else {
+    y_step = -1;
+  }
+
+  for (int x = x0; x <= x1; x++) {
+    if (is_steep) {
+      plot_pixel(y, x, line_color);
+    } else {
+      plot_pixel(x, y, line_color);
+    }
+
+    error += deltaY;
+
+    if (error > 0) {
+      y += y_step;
+      error -= deltaX;
+    }
+  }
+}
+
+void wait_for_vsync() {
+  volatile int* front_buffer_ptr = (int*)0xFF203020;
+  volatile int* status_ptr = (int*)0xFF20302C;
+
+  // Synchronize with vert. sync. cycle of VGA controller and swap front/back
+  // buffers
+  *front_buffer_ptr =
+      0x1;  // Write 1 to Buffer register (bit 1 of status becomes 1)
+  while (*status_ptr & 0x1 != 0) {
+  }  // Wait until vert. sync. completes, when bit 1 of status resets to 0 again
+     // Return once vsync done
+}
+
+struct boxInfo {
+  int x;
+  int y;
+  int vel_x;  // Either 1 or -1
+  int vel_y;  // Either 1 or -1
+};
+
+struct playerInfo {
+  int x;
+  int y;
+};
+
+void boxMove(struct boxInfo* inputBox) {
+  // First, check if box hit any walls and flip velocities accordingly if so
+
+  // If the box hits the left wall, flip horizontal velocity
+  if (inputBox->x == 5 && inputBox->vel_x == -1) {
+    inputBox->vel_x *= -1;
+  }
+  // If the box hits the right wall, flip horizontal velocity
+  else if (inputBox->x == 314 && inputBox->vel_x == 1) {
+    inputBox->vel_x *= -1;
+  }
+
+  // If the box hits the upper wall, flip vertical velocity
+  if (inputBox->y == 5 && inputBox->vel_y == -1) {
+    inputBox->vel_y *= -1;
+  }
+  // If the box hits the bottom wall, flip vertical velocity
+  else if (inputBox->y == 235 && inputBox->vel_y == 1) {
+    inputBox->vel_y *= -1;
+  }
+
+  // Update box position as per set velocities
+  inputBox->x += inputBox->vel_x;
+  inputBox->y += inputBox->vel_y;
+}
+
+int randomX() { return rand() % (319 + 1); }
+
+int randomY() { return rand() % (239 + 1); }
+
+int randomVel() {
+  int value = (rand() % 1) + 1;
+
+  if (value % 2 == 0) {
+    return 1;
+  } else {
+    return -1;
+  }
+}
+
+void plotAllBox(struct boxInfo* boxArray, int size, short int color) {
+  for (int i = 0; i < size; i++) {
+    for (int j = -2; j < 3; j++) {
+      for (int k = -2; k < 3; k++) {
+        plot_pixel(boxArray[i].x + j, boxArray[i].y + k, color);
+      }
+    }
+  }
+}
+
+bool checkCollision(int laserMatrix[240][320], struct playerInfo* player) {
+  // Check if the player's position corresponds to a 1 in the laser matrix
+  for (int x = -PLAYER_WALL_OFFSET; x <= PLAYER_WALL_OFFSET; x++) {
+    for (int y = -PLAYER_WALL_OFFSET; y <= PLAYER_WALL_OFFSET; y++) {
+      int checkX = player->x + x;
+      int checkY = player->y + y;
+
+      // Ensure within bounds before checking
+      if (checkX >= 0 && checkX < 320 && checkY >= 0 && checkY < 240) {
+        if (laserMatrix[checkY][checkX] == 1) {
+          return true;  // Collision detected
+        }
+      }
+    }
+  }
+  return false;
+}
+
+void moveAllBox(struct boxInfo* boxArray, int size) {
+  for (int i = 0; i < size; i++) {
+    boxMove((boxArray + i));
+  }
+}
+
+void copyBoxesArray(struct boxInfo* sourceArray, struct boxInfo* destArray,
+                    int size) {
+  for (int i = 0; i < size; i++) {
+    destArray[i] = sourceArray[i];
+  }
+}
+
+void drawAllLine(struct boxInfo* boxArray, int size, short int color) {
+  for (int i = 0; i < size - 1; i++) {
+    draw_line(boxArray[i].x, boxArray[i].y, boxArray[i + 1].x,
+              boxArray[i + 1].y, color);
+  }
+}
+
+void smartPlayerPosUpdate(struct playerInfo* player, enum Direction direction) {
+  switch (direction) {
+    case (UP): {
+      if (player->y > (4 + PLAYER_WALL_OFFSET)) {
+        player->y -= PLAYER_MOVE_Y;
+      }
+      break;
+    }
+
+    case (DOWN): {
+      if (player->y < (235 - PLAYER_WALL_OFFSET)) {
+        player->y += PLAYER_MOVE_Y;
+      }
+      break;
+    }
+
+    case (LEFT): {
+      if (player->x > (4 + PLAYER_WALL_OFFSET)) {
+        player->x -= PLAYER_MOVE_X;
+      }
+      break;
+    }
+
+    case (RIGHT): {
+      if (player->x < (315 - PLAYER_WALL_OFFSET)) {
+        player->x += PLAYER_MOVE_X;
+      }
+      break;
+    }
+
+    default:
+      // Intentionally do nothing for STILL
+      break;
+  }
+}
+
+void movePlayer(struct playerInfo* player) {
+  enum Direction direction = getDirection();
+
+  smartPlayerPosUpdate(player, direction);
+}
+
+void plotPlayer(struct playerInfo* player, short int color) {
+  for (int x = -1 * PLAYER_WALL_OFFSET + player->x;
+       x <= PLAYER_WALL_OFFSET + player->x; x++) {
+    for (int y = -1 * PLAYER_WALL_OFFSET + player->y;
+         y <= PLAYER_WALL_OFFSET + player->y; y++) {
+      plot_pixel(x, y, color);
+    }
+  }
+}
+
+void copyPlayer(struct playerInfo* source, struct playerInfo* destination) {
+  destination->x = source->x;
+  destination->y = source->y;
+}
+
+void erasePreviousPlayerPos(int prevPos[320][240]) {
+  int black = 0x0;
+
+  struct playerInfo playerRemove;
+  for (int x = 0; x < 320; x++) {
+    for (int y = 0; y < 240; y++) {
+      if (prevPos[x][y] == 1) {
+        playerRemove.x = x;
+        playerRemove.y = y;
+        plotPlayer(&playerRemove, black);
+      }
+    }
+  }
+}
+
+void updatePrevPlayerMatrix(struct playerInfo* player, int prevPos[320][240]) {
+  prevPos[player->x][player->y] = 1;
+}
+
+void resetPrevPlayerMatrix(int prevPos[320][240]) {
+  for (int x = 0; x < 320; x++) {
+    for (int y = 0; y < 240; y++) {
+      prevPos[x][y] = 0;
+    }
+  }
+}
+
+int main(void) {
+  srand(555);
+
+  struct boxInfo box[8];
+  struct boxInfo tempBox[8];
+  int prevPlayerPos[320][240] = {0};
+
+  struct playerInfo player = {200, 120};
+  struct playerInfo tempPlayer = player;
+
+  for (int i = 0; i < 8; i++) {
+    box[i].x = randomX();
+    box[i].y = randomY();
+
+    box[i].vel_x = randomVel();
+    box[i].vel_y = randomVel();
+  }
+
+  int set_colour = 0x07E0;  // Green
+  int player_colour = 0x555;
+  int black = 0x0;
+
+  // initialize location and direction of rectangles(not shown)
+
+  /* set front pixel buffer to Buffer 1 */
+  *(pixel_ctrl_ptr + 1) =
+      (int)&Buffer1;  // first store the address in the back buffer
+  /* now, swap the front/back buffers, to set the front buffer location */
+  wait_for_vsync();
+  /* initialize a pointer to the pixel buffer, used by drawing functions */
+  pixel_buffer_start = *pixel_ctrl_ptr;
+  clear_screen();  // pixel_buffer_start points to the pixel buffer
+
+  /* set back pixel buffer to Buffer 2 */
+  *(pixel_ctrl_ptr + 1) = (int)&Buffer2;
+  pixel_buffer_start = *(pixel_ctrl_ptr + 1);  // we draw on the back buffer
+  clear_screen();  // pixel_buffer_start points to the pixel buffer
+
+  // Initial set-up for displaying boxes and lines
+  plotAllBox(box, 8, set_colour);
+  drawAllLine(box, 8, set_colour);
+
+  copyBoxesArray(box, tempBox, 8);
+
+  wait_for_vsync();
+  pixel_buffer_start = *(pixel_ctrl_ptr + 1);
+
+  plotAllBox(box, 8, black);
+  drawAllLine(box, 8, black);
+
+  // Begin loop
+  while (1) {
+    updatePrevPlayerMatrix(&player, prevPlayerPos);
+
+    plotPlayer(&player, player_colour);
+
+    movePlayer(&player);
+
+    // Move all boxes by 1 in the logic system
+    moveAllBox(box, 8);
+
+    // Visualize boxes at their new positions
+    plotAllBox(box, 8, set_colour);
+
+    // Visualize lines between the boxes
+    drawAllLine(box, 8, set_colour);
+
+    if (checkCollision) {
+      // Swap buffers: boxes and lines are now displayed.
+      wait_for_vsync();
+      pixel_buffer_start = *(pixel_ctrl_ptr + 1);
+
+      // Erase previous boxes and lines
+      plotAllBox(tempBox, 8, black);
+      drawAllLine(tempBox, 8, black);
+      copyBoxesArray(box, tempBox, 8);
+
+      // Erase previous player
+      erasePreviousPlayerPos(prevPlayerPos);
+
+      // resetPrevPlayerMatrix(prevPlayerPos);
+    } else {
+      // gameOver();
+    }
+  }
+}

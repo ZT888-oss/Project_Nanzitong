@@ -1,0 +1,203 @@
+// libraries
+#include <Adafruit_MotorShield.h>
+
+#include "Adafruit_BluefruitLE_SPI.h"
+
+// Define motor pins
+#define MOTOR_A_TERMINAL 1
+#define MOTOR_B_TERMINAL 2
+#define MOTOR_C_TERMINAL 3
+#define MOTOR_D_TERMINAL 4
+// constants relating to our adafruit board (these were found online)
+#define VERBOSE_MODE false
+#define BLUEFRUIT_SPI_CS 8
+#define BLUEFRUIT_SPI_IRQ 7
+#define BLUEFRUIT_SPI_RST 4
+
+#define pin1 9
+#define pin2 6
+#define pin3 5
+
+// Define the bluetooth module object
+Adafruit_BluefruitLE_SPI ble(BLUEFRUIT_SPI_CS, BLUEFRUIT_SPI_IRQ,
+                             BLUEFRUIT_SPI_RST);
+
+// Instantiating the motorshield
+Adafruit_MotorShield AFMS = Adafruit_MotorShield();
+
+Adafruit_DCMotor* MOTOR_A = AFMS.getMotor(MOTOR_A_TERMINAL);
+Adafruit_DCMotor* MOTOR_B = AFMS.getMotor(MOTOR_B_TERMINAL);
+Adafruit_DCMotor* MOTOR_C = AFMS.getMotor(MOTOR_C_TERMINAL);
+Adafruit_DCMotor* MOTOR_D = AFMS.getMotor(MOTOR_D_TERMINAL);
+
+bool motorsRun = false;
+int current = 0;
+// A function that prints the error
+void error(const __FlashStringHelper* err) {
+  Serial.println(err);
+  while (1);
+}
+
+void setup() {
+  // Initialise the bluetooth module
+  if (!ble.begin(VERBOSE_MODE)) {
+    error(
+        F("Couldn't find Bluefruit, make sure it's in CoMmanD mode & check "
+          "wiring?"));
+  }
+
+  // Perform a factory reset to make sure everything is in a known state
+  if (!ble.factoryReset()) {
+    error(F("Couldn't factory reset"));
+  }
+
+  // Disable command echo from Bluefruit so commands aren't sent back for
+  // confirmation
+  ble.echo(false);
+
+  // ble.info() can be used to get info about the bluefruit module
+
+  // prevents module from sending extensive debug info
+  ble.verbose(false);
+
+  // Wait for connection
+  while (!ble.isConnected()) {
+    delay(500);
+  }
+
+  // Set module to DATA mode
+  ble.setMode(BLUEFRUIT_MODE_DATA);
+
+  AFMS.begin();
+  MOTOR_A->setSpeed(0);
+  MOTOR_A->run(RELEASE);
+  // Reset B
+  MOTOR_B->setSpeed(0);
+  MOTOR_B->run(RELEASE);
+  // Reset C
+  MOTOR_C->setSpeed(0);
+  MOTOR_C->run(RELEASE);
+  // Reset D
+  MOTOR_D->setSpeed(0);
+  MOTOR_D->run(RELEASE);
+}
+
+char* button = NULL;
+void loop() {
+  // char* menu
+  //  get controller input as a single char
+  if (ble.available()) {
+    button = getInput();
+    Serial.print(button);
+  }
+  // access menu 1(go auto)
+  if (strcmp(button, "!B11:") == 0) {
+    current = 1;
+  }
+  // access menu 2(control by hand)
+  else if (strcmp(button, "!B219!") == 0) {
+    current = 2;
+  }
+  if (current = 1) {
+    return runAuto();
+  } else if (current = 2) {
+    return runMunul(button);
+  }
+}
+// function that reads the next 5 chars, returns the last button pressed
+char* getInput() {
+  // use variable = ble.read() to read a single char
+  static char read[6] = {'\0'};
+  for (int i = 0; i < 5; i++) {
+    read[i] = ble.read();
+  }
+  read[5] = '\0';  //// Ensure string is null-terminated
+  return read;
+}
+void runAuto() {
+  int sensorVal1 = digitalRead(pin1);
+  int sensorVal2 = digitalRead(pin2);
+  int sensorVal3 = digitalRead(pin3);
+  if ((sensorVal1 == 1) && (sensorVal2 == 0)) {
+    MOTOR_A->setSpeed(0);
+    MOTOR_D->setSpeed(0);
+    MOTOR_D->run(BACKWARD);
+    MOTOR_B->setSpeed(250);
+    MOTOR_B->run(BACKWARD);
+    MOTOR_C->setSpeed(250);
+    MOTOR_C->run(FORWARD);
+
+  } else if ((sensorVal1 == 0) && (sensorVal2 == 1)) {
+    MOTOR_A->setSpeed(250);
+    MOTOR_A->run(BACKWARD);
+    MOTOR_D->setSpeed(250);
+    MOTOR_D->run(FORWARD);
+    MOTOR_B->setSpeed(0);
+    MOTOR_C->setSpeed(0);
+    MOTOR_C->run(BACKWARD);
+  }
+
+  else if ((sensorVal1 == 1) && (sensorVal2 == 1)) {
+    MOTOR_A->setSpeed(250);
+    MOTOR_A->run(BACKWARD);
+    MOTOR_B->setSpeed(250);
+    MOTOR_B->run(BACKWARD);
+    MOTOR_C->setSpeed(250);
+    MOTOR_C->run(FORWARD);
+    MOTOR_D->setSpeed(250);
+    MOTOR_D->run(FORWARD);
+  }
+}
+
+void runMunul(char* button) {
+  // go forward:!B516
+  if (strcmp(button, "!B516") == 0) {
+    MOTOR_A->setSpeed(250);
+    MOTOR_A->run(BACKWARD);
+    MOTOR_B->setSpeed(250);
+    MOTOR_B->run(BACKWARD);
+    MOTOR_C->setSpeed(250);
+    MOTOR_C->run(FORWARD);
+    MOTOR_D->setSpeed(250);
+    MOTOR_D->run(FORWARD);
+  } else if (strcmp(button, "!B714") == 0) {  // left!B714
+    MOTOR_A->setSpeed(0);
+    MOTOR_D->setSpeed(0);
+    MOTOR_D->run(BACKWARD);
+    MOTOR_B->setSpeed(250);
+    MOTOR_B->run(BACKWARD);
+    MOTOR_C->setSpeed(250);
+    MOTOR_C->run(FORWARD);
+
+  } else if (strcmp(button, "!B615") == 0) {  // backwards!B615
+    MOTOR_A->setSpeed(250);
+    MOTOR_A->run(FORWARD);
+    MOTOR_B->setSpeed(250);
+    MOTOR_B->run(FORWARD);
+    MOTOR_C->setSpeed(250);
+    MOTOR_C->run(BACKWARD);
+    MOTOR_D->setSpeed(250);
+    MOTOR_D->run(BACKWARD);
+  } else if (strcmp(button, "!B813") == 0) {  // right!B813
+    MOTOR_A->setSpeed(250);
+    MOTOR_A->run(BACKWARD);
+    MOTOR_D->setSpeed(250);
+    MOTOR_D->run(FORWARD);
+    MOTOR_B->setSpeed(0);
+    MOTOR_C->setSpeed(0);
+    MOTOR_C->run(BACKWARD);
+  } else {  // stop(release)
+    MOTOR_A->setSpeed(0);
+    MOTOR_A->run(RELEASE);
+    // Reset B
+    MOTOR_B->setSpeed(0);
+    MOTOR_B->run(RELEASE);
+    // Reset C
+    MOTOR_C->setSpeed(0);
+    MOTOR_C->run(RELEASE);
+    // Reset D
+    MOTOR_D->setSpeed(0);
+    MOTOR_D->run(RELEASE);
+  }
+  // control motors based on inputs
+}
