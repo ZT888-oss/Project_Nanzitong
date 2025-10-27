@@ -78,6 +78,4 @@ Together, these algorithms ensure that TerraLink provides **rapid, accurate, and
 
 ---
 
-**Author(s):** [Your Name / Team Name]  
-**Project:** TerraLink – Eco-Friendly Urban Navigation  
-**Year:** 2025
+
