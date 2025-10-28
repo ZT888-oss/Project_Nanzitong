@@ -1,4 +1,4 @@
-# Bluetooth Motor Controller 🚀
+# Bluetooth Motor Controller 
 
 A Bluetooth-controlled motor system using the **Adafruit Motor Shield** and **Bluefruit SPI module**.  
 This project allows real-time remote control of four DC motors using a Bluetooth-enabled device.
