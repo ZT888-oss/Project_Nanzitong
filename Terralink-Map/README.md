@@ -1,6 +1,6 @@
 #  TerraLink: Move With Nature
 
-## 🧭 Overview
+## Overview
 **TerraLink** is an eco-friendly navigation system that integrates **nature trails** and **urban transit** into one seamless digital map.  
 It is designed to help users explore cities sustainably by combining **multipurpose trails**, **subway lines**, and **eco-routing algorithms** to recommend the best paths for walking, cycling, or public transport.
 
