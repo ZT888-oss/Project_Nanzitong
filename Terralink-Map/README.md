@@ -76,6 +76,4 @@ Together, these algorithms ensure that TerraLink provides **rapid, accurate, and
 
 ---
 
----
-
 
