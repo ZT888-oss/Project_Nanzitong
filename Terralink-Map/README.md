@@ -74,6 +74,5 @@ TerraLink bridges the gap between **traditional city navigation tools** (like Go
 
 Together, these algorithms ensure that TerraLink provides **rapid, accurate, and adaptive routing**, even across large urban datasets.
 
----
 
 
