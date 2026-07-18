@@ -10,7 +10,7 @@ Deep Learning
   
 Machine Learning
 - [Spam Detection](spam_detetction/)
-- [Moving Rover](moving rover/)
+- [Moving Rover](moving_rover/)
 
 
 Software engineering:
