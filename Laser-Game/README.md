@@ -38,6 +38,37 @@ It demonstrates graphics programming, input handling, collision detection, and a
 
 ---
 
+
+## Game Cover
+<p align="center">
+  <img
+    src="https://github.com/user-attachments/assets/3b607571-c498-44a6-9ba0-b99aba0db2e0"
+    alt="Game Cover"
+    width="600">
+</p>
+
+## Game outlook & Game over Screen
+<p align ="center">
+  
+ <img width="704" height="527" alt="Screenshot 2026-07-22 at 7 18 35 PM" src="https://github.com/user-attachments/assets/02cb3d51-275d-4ba3-abbe-bb0f00cda51a" />
+
+
+</p>
+
+---
+
+## Getting Started
+1. Set up the FPGA development environment (e.g., DE-series board with Nios II).  
+2. Compile and Load the C code.  
+3. Load the executable onto the FPGA.
+4. Press Enter key on PS/2 keyboard to start the game.
+5. Play the game using arrow keys.  
+
+*Note:* Designed for FPGA hardware with PS/2 keyboard and VGA output.
+
+
+---
+
 ## Code Highlights
 - **Double Buffering:** Smooth animation without flicker  
 - **Bresenham Line Algorithm:** Efficient line drawing between boxes  
@@ -46,17 +77,7 @@ It demonstrates graphics programming, input handling, collision detection, and a
 
 ---
 
-## Getting Started
-1. Set up the FPGA development environment (e.g., DE-series board with Nios II).  
-2. Compile the C code with the toolchain.  
-3. Load the executable onto the FPGA.  
-4. Play the game using arrow keys.  
-
-*Note:* Designed for FPGA hardware with PS/2 keyboard and VGA output.
-
----
-
-## Skills Demonstrated
+## Skills
 - Embedded C programming  
 - Real-time graphics and input handling  
 - Low-level hardware interfacing (VGA, PS/2)  
