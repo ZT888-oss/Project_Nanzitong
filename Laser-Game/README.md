@@ -44,7 +44,7 @@ It demonstrates graphics programming, input handling, collision detection, and a
   <img
     src="https://github.com/user-attachments/assets/3b607571-c498-44a6-9ba0-b99aba0db2e0"
     alt="Game Cover"
-    width="600">
+    width="704">
 </p>
 
 ## Game outlook & Game over Screen
