@@ -41,6 +41,10 @@ TerraLink bridges the gap between **traditional city navigation tools** (like Go
 ### Find Rounte button: wayfinding & optimal delivery rounte
 <img width="1178" height="569" alt="Screenshot 2026-07-22 at 5 54 59 PM" src="https://github.com/user-attachments/assets/069d291b-1e2d-4965-b5ee-4684cdde28b0" />
 
+### Search 🔍: enter two intersections in format: 
+          **Street1,Stree2|Street3,Stree4**, then click proceed
+can also find the rounte you want
+    
 ### If need help: Pressing Help button will pop out the insturtcion of using map
 <img width="877" height="627" alt="image (1)" src="https://github.com/user-attachments/assets/62949954-e996-4b9b-9dee-3e4bbc0f302b" />
 
