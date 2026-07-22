@@ -28,28 +28,21 @@ TerraLink bridges the gap between **traditional city navigation tools** (like Go
   Designed following accessibility standards for map color, contrast, and layout, ensuring readability and clarity for all users.
 
 
+## UI
+<img width="922" height="652" alt="image" src="https://github.com/user-attachments/assets/b1ad0d44-cff6-4e3f-b4bc-b9a8e0afad16" />
 
 ## How to Use TerraLink
 
-1. **Open the TerraLink Map Interface**  
-   Access the web or mobile interface.
+### Load Map: clik the button then enter the country name in format like: montreal-canada
 
-2. **Select Your Start and Destination Points**  
-   Choose any location within supported cities (e.g., Toronto, NYC, Boston).
+### Find Route button: Cliking two intersections on the map or type their name manually
+<img width="636" height="712" alt="image (2)" src="https://github.com/user-attachments/assets/bdeba334-8161-4b4a-bb83-eaba95333f45" />
 
-3. **Apply Filters**  
-   - Choose your travel mode (trail, transit, or hybrid).  
-   - Enable eco-priority to view the most sustainable routes.  
+### Find Rounte button: wayfinding & optimal delivery rounte
+<img width="1178" height="569" alt="Screenshot 2026-07-22 at 5 54 59 PM" src="https://github.com/user-attachments/assets/069d291b-1e2d-4965-b5ee-4684cdde28b0" />
 
-4. **View Suggested Routes**  
-   TerraLink will compute and display optimal paths using Dijkstra’s and A* algorithms.  
-   Each route includes:
-   - Distance and estimated travel time  
-   - Trail and subway connectivity  
-   - Eco-efficiency score  
-
-5. **Navigate and Explore**  
-   Follow the guided route to enjoy a smoother, greener commute — **moving with nature**.
+### If need help: Pressing Help button will pop out the insturtcion of using map
+<img width="877" height="627" alt="image (1)" src="https://github.com/user-attachments/assets/62949954-e996-4b9b-9dee-3e4bbc0f302b" />
 
 
 ## Algorithms Used
