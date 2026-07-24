@@ -19,9 +19,7 @@ from src import (
 state_cache = {}
 
 
-###############################################################################
-############################# VALUE FUNCTIONS #################################
-###############################################################################
+
 def compute_utility(board: tuple[tuple[int, ...], ...], color: int) -> int:
     """
     Return the utility value of the given board for the given player color.
