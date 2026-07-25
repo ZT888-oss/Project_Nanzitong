@@ -1,16 +1,12 @@
 
-## Q Portal — Full-Stack Learning Management System with an AI Well-Being Assistant
+## Q Portal — Full-Stack Student mental health System
 
 
 ### Main Features Overview(design proposal):
 
 - Student login and registration
 
-- Course dashboard
-
-- Assignments, announcements, grades, and calendar
-
-- Navi AI assistant in the bottom-right corner
+- Navi AI assistant 
 
 - Private chat history
 
