@@ -1,8 +1,11 @@
-const naviForm = document.getElementById("navi-form");
+const poviForm = document.getElementById("povi-form");
 const studentMessage = document.getElementById("student-message");
-const naviResponse = document.getElementById("navi-response");
+const poviResponse = document.getElementById("povi-response");
 const signOutButton = document.getElementById("sign-out-button");
+const languageSelect = document.getElementById("language-select");
 
+
+//sigh out jumping to login page
 signOutButton.addEventListener("click", function (event) {
     // Remove login information if you stored it
     localStorage.removeItem("loggedIn");
@@ -11,7 +14,40 @@ signOutButton.addEventListener("click", function (event) {
     window.location.href = "login.html";
 });
 
-naviForm.addEventListener("submit", function (event) {
+
+//language choice
+const translations = {
+
+    en: {
+        title: "Share How You're Feeling",
+        description: "Tell Povi what is on your mind.",
+        button: "Talk to Povi"
+    },
+
+    fr: {
+        title: "Partagez ce que vous ressentez",
+        description: "Dites à Povi ce qui vous préoccupe.",
+        button: "Parler avec Povi"
+    }
+
+};
+
+languageSelect.addEventListener("change", function () {
+
+    const language = this.value;
+
+    document.getElementById("title").textContent =
+        translations[language].title;
+
+    document.getElementById("description").textContent =
+        translations[language].description;
+
+    document.getElementById("submit-button").textContent =
+        translations[language].button;
+
+});
+
+poviForm.addEventListener("submit", function (event) {
     event.preventDefault();
 
     const message = studentMessage.value.trim();
@@ -20,7 +56,7 @@ naviForm.addEventListener("submit", function (event) {
         return;
     }
 
-    naviResponse.innerHTML = `
+    poviResponse.innerHTML = `
         <div class="support-icon">♡</div>
 
         <div>

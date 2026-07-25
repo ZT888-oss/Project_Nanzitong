@@ -23,7 +23,7 @@
         </div>
 
         <nav class="dashboard-navigation">
-            <select aria-label="Select language">
+            <select aria-label="Select languag" id="language-select">
                 <option>English</option>
                 <option>French</option>
             </select>
@@ -52,25 +52,21 @@
         <section class="dashboard-card check-in-card">
             <h2>Share How You’re Feeling</h2>
 
-            <p class="section-description">
-                Tell Povi what is on your mind. You can write about
-                academic stress, sleep, motivation, relationships,
-                or your general well-being.
+            <p id="description" class="section-description">
+                Tell Povi what has been on your mind lately. You can say whatever you want!
+                Your friend Povi is always here listening to you!
             </p>
 
-            <form id="navi-form">
-                <label for="student-message">
-                    Your thoughts
-                </label>
+            <form id="povi-form" novalidate>
 
                 <textarea
                     id="student-message"
                     name="message"
-                    placeholder="What has been on your mind lately?"
-                    required
+                    placeholder="How's going?"
+                    
                 ></textarea>
 
-                <button type="submit" class="primary-button">
+                <button type="submit" class="primary-button" id="submit-button">
                     Talk to Povi
                 </button>
             </form>
@@ -80,7 +76,7 @@
             <h2>Povi’s Support</h2>
 
             <div
-                id="Povi-response"
+                id="povi-response"
                 class="support-message"
             >
                 <div class="support-icon">♡</div>
