@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/zhangnanzitong/Project_Nanzitong-1",
-      "program": "/Users/zhangnanzitong/Project_Nanzitong-1/build/Debug/outDebug"
+      "cwd": "/Users/zhangnanzitong/Project_Nanzitong",
+      "program": "/Users/zhangnanzitong/Project_Nanzitong/build/Debug/outDebug"
     }
   ]
 }
