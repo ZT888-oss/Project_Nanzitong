@@ -10,6 +10,9 @@ const illustration = document.querySelector(".login-illustration");
 const introductionTitle = document.querySelector(".introduction-text h2");
 const introductionParagraph = document.querySelector(".introduction-text p");
 
+
+
+
 const slides = [
     {
         image: "Login/mental-health.jpg",
@@ -195,7 +198,6 @@ function stopLoading() {
 
 // =========================================
 // Fake Backend Login
-// (Replace later with Flask/FastAPI)
 // =========================================
 
 async function login(username, password) {
@@ -227,9 +229,8 @@ async function login(username, password) {
 
 
 
+
 // Handle Login
-
-
 loginForm.addEventListener("submit", async function (event) {
 
     event.preventDefault();
@@ -250,10 +251,7 @@ loginForm.addEventListener("submit", async function (event) {
 
     if (response.success) {
 
-        alert("Login Successful!");
-
-        // Later replace with:
-        // window.location.href = "dashboard.html";
+        window.location.href = "dashboard.html";
 
     } else {
 
@@ -325,10 +323,8 @@ function validateRegister() {
     return true;
 }
 
-// =========================================
-// Press Escape to Clear Errors
-// =========================================
 
+// Press Escape to Clear Errors
 document.addEventListener("keydown", (event) => {
 
     if (event.key === "Escape") {

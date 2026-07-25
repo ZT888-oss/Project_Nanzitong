@@ -18,13 +18,13 @@ signOutButton.addEventListener("click", function (event) {
 //language choice
 const translations = {
 
-    en: {
+    English: {
         title: "Share How You're Feeling",
         description: "Tell Povi what is on your mind.",
         button: "Talk to Povi"
     },
 
-    fr: {
+    French: {
         title: "Partagez ce que vous ressentez",
         description: "Dites à Povi ce qui vous préoccupe.",
         button: "Parler avec Povi"
@@ -46,6 +46,8 @@ languageSelect.addEventListener("change", function () {
         translations[language].button;
 
 });
+
+
 
 poviForm.addEventListener("submit", function (event) {
     event.preventDefault();
