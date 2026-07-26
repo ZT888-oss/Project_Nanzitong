@@ -17,7 +17,7 @@
 <img width="1512" height="982" alt="Screenshot 2026-07-26 at 4 10 36 AM" src="https://github.com/user-attachments/assets/528b4ad4-4e6d-4c6f-bc6a-be1588e73eae" />
 
 #### Dashboard
-Register Page<img width="1512" height="982" alt="Screenshot 2026-07-26 at 4 12 56 AM" src="https://github.com/user-attachments/assets/ecb5ba82-82a4-4268-84bb-cdca6da1f5ba" />
+<img width="1512" height="982" alt="Screenshot 2026-07-26 at 4 12 56 AM" src="https://github.com/user-attachments/assets/ecb5ba82-82a4-4268-84bb-cdca6da1f5ba" />
 
 ### How to Open the website
 1. Type in VScode/computer **terminal**:
