@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/zhangnanzitong/Project_Nanzitong",
-      "program": "/Users/zhangnanzitong/Project_Nanzitong/build/Debug/outDebug"
+      "cwd": "/Users/zhangnanzitong/Project_Nanzitong/Q portal/database",
+      "program": "/Users/zhangnanzitong/Project_Nanzitong/Q portal/database/build/Debug/outDebug"
     }
   ]
 }
