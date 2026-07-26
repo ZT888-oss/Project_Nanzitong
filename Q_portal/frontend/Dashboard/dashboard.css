@@ -1,0 +1,275 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f7f8;
+    color: #202124;
+}
+
+.dashboard-header {
+    padding: 18px 7%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+
+    background: #ffffff;
+    border-bottom: 1px solid #dddddd;
+}
+
+.brand-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.brand {
+    /*By default, Flexbox arranges the direct children in a row from left to right.*/
+    display: flex;
+    gap: 14px;
+}
+
+.brand-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 12px;
+    background: #4caf50;
+    color: #ffffff;
+    font-size: 25px;
+}
+
+.brand h1 {
+    font-size: 1.5rem;
+}
+
+.brand p {
+    margin-top: 3px;
+    color: #6f7782;
+}
+
+.dashboard-navigation {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dashboard-navigation select,
+.navigation-button,
+.support-button {
+    min-height: 44px;
+    padding: 0 18px;
+
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+
+    background: #ffffff;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.student-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-avatar {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    background: #e8f7eb;
+    color: #377c45;
+    font-weight: 600;
+}
+
+.support-button {
+    border-color: #4caf50;
+    background: #4caf50;
+    color: #ffffff;
+}
+
+.dashboard-main {
+    width: min(1180px, 90%);
+    margin: 38px auto;
+}
+
+.dashboard-card {
+    margin-bottom: 28px;
+    padding: 28px;
+
+    background: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 12px;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.dashboard-card h2 {
+    margin-bottom: 12px;
+    font-size: 1.65rem;
+}
+
+.section-description {
+    margin-bottom: 30px;
+    color: #707070;
+    line-height: 1.6;
+}
+
+#Povi-form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+#student-message {
+    width: 100%;
+    min-height: 160px;
+    padding: 16px;
+
+    resize: vertical;
+
+    border: 1px solid #d7d7d7;
+    border-radius: 8px;
+
+    font: inherit;
+    line-height: 1.5;
+    outline: none;
+}
+
+#student-message:focus {
+    border-color: #4caf50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.12);
+}
+
+.primary-button {
+    margin-top: 18px;
+    padding: 13px 24px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #4caf50;
+    color: #ffffff;
+
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.primary-button:hover {
+    background: #3f9143;
+}
+
+.support-message {
+    padding: 24px;
+
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+
+    border-radius: 10px;
+    background: #eaf8ee;
+    color: #276a36;
+}
+
+.support-icon {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+    background: #d3f2dc;
+    font-size: 25px;
+}
+
+.support-message h3 {
+    margin-bottom: 8px;
+}
+
+.support-message p {
+    line-height: 1.6;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+}
+
+.small-card {
+    margin-bottom: 0;
+}
+
+.mood-options {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.mood-options button {
+    width: 48px;
+    height: 48px;
+
+    border: 1px solid #dddddd;
+    border-radius: 50%;
+    background: #ffffff;
+
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+.small-card a {
+    display: block;
+    margin-top: 14px;
+    color: #409447;
+    text-decoration: none;
+}
+
+@media (max-width: 900px) {
+    .dashboard-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .dashboard-navigation {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard-main {
+        width: 92%;
+        margin-top: 22px;
+    }
+
+    .dashboard-card {
+        padding: 20px;
+    }
+
+    .student-profile span {
+        display: none;
+    }
+}
