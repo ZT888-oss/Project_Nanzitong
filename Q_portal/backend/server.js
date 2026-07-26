@@ -23,7 +23,6 @@ db.prepare(`
 //convert incoming JSON back to javascript object that express can understand
 app.use(express.json());  //For incoming requests, use Express's JSON-reading functionality.
 
-app.use(express.urlencoded({ extended: true }));
 
 //For incoming requests, use Express's static-file-serving functionality
 app.use(
