@@ -33,7 +33,7 @@ node backend/server.js
 
 
 ### For your convenience, here are password & email set for you to directly login
-Email,   Password: 
+Email,   Password, respectively:
 ```Markdown
 test@163.com
 ```
