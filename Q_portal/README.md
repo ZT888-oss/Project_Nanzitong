@@ -44,10 +44,10 @@ Pass123/
 ```
 
 ### Overview
-Q Portal is designed according to industry standard and will be assessed by [MHCC] (https://mentalhealthcommission.ca/mhcc-assessed-mental-health-apps/)
+Q Portal is designed according to industry standard and will be assessed by [MHCC](https://mentalhealthcommission.ca/mhcc-assessed-mental-health-apps/)
 
 
-Daily mood check-in use [5-Point Scale] (https://vkc.vumc.org/assets/files/triad/tips/5-Point_Scales.pdf)
+Daily mood check-in use [5-Point Scale](https://vkc.vumc.org/assets/files/triad/tips/5-Point_Scales.pdf)
 
 ❗️  **Important Notice**
 
