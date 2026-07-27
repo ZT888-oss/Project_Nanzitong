@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="Dashboard/dashboard.css">
 </head>
@@ -26,8 +24,8 @@
 
         <nav class="dashboard-navigation">
             <select aria-label="Select languag" id="language-select">
-                <option >English</option>
-                <option >French</option>
+                <option>English</option>
+                <option>French</option>
             </select>
 
             <div class="student-profile">
@@ -49,77 +47,147 @@
         </nav>
     </header>
 
+
+    <div id="welcome-modal" class="modal">
+        <div class="modal-content">
+            <button id="close-modal" class="close-button">&times;</button>
+
+            <h2>Mood Check-in</h2>
+
+            <div class="mood-options">
+                <button type="button" class="mood-option" data-level="5">😊</button>
+                <button type="button" class="mood-option" data-level="4">🙂</button>
+                <button type="button" class="mood-option" data-level="3">😐</button>
+                <button type="button" class="mood-option" data-level="2">😟</button>
+                <button type="button" class="mood-option" data-level="1">😣</button>
+            </div>
+
+            <p id="mood-error"></p>
+
+            <button id="continue-button">Continue</button>
+        </div>
+    </div>
+
+
     <main class="dashboard-main">
 
-        <section class="dashboard-card check-in-card">
-            <h2 id="title">Share How You’re Feeling</h2>
+        <section class="wellbeing-layout">
 
-            <p id="description" class="section-description">
-                Tell Povi what has been on your mind lately. You can say whatever you want!
-                Your friend Povi is always here listening to you!
-            </p>
+            <div class="dashboard-card wellbeing-card">
+                <div class="wellbeing-card-header">
+                    <div>
+                        <h2>Well-being Index</h2>
+                        <p>Your recent mood check-ins</p>
+                    </div>
 
-            <form id="povi-form" novalidate>
-
-                <textarea
-                    id="student-message"
-                    name="message"
-                    placeholder="How's going?"
-                    
-                ></textarea>
-
-                <button id="submit-button" type="submit" class="primary-button" >
-                    Talk to Povi
-                </button>
-            </form>
-        </section>
-
-        <section class="dashboard-card">
-            <h2>Povi’s Support</h2>
-
-            <div
-                id="povi-response"
-                class="support-message"
-            >
-                <div class="support-icon">♡</div>
-
-                <div>
-                    <h3>You are not alone</h3>
-
-                    <p>
-                        Povi will provide supportive suggestions here
-                        after you submit your check-in.
-                    </p>
+                    <span id="wellbeing-status">Loading...</span>
                 </div>
+
+                <div class="wellbeing-result">
+                    <strong id="wellbeing-score">--</strong>
+                    <span>/100</span>
+                </div>
+
+                <div class="wellbeing-progress">
+                    <div id="wellbeing-progress-bar"></div>
+                </div>
+
+                <p id="wellbeing-description">
+                    Your average well-being condition based on your recent
+                    check-ins.
+                </p>
             </div>
-        </section>
 
-        <section class="dashboard-grid">
+            <div id="wellbeing-recommendation" class="dashboard-card wellbeing-recommendation" hidden>
+                <h3 id="recommendation-title"></h3>
 
-            <article class="dashboard-card small-card">
-                <h2>Mood Check-in</h2>
+                <p id="recommendation-message"></p>
 
-                <div class="mood-options">
-                    <button type="button">😊</button>
-                    <button type="button">🙂</button>
-                    <button type="button">😐</button>
-                    <button type="button">😟</button>
-                    <button type="button">😣</button>
+                <div class="recommendation-actions">
+                    <button id="talk-to-povi-button" type="button" hidden>
+                        Talk to Povi
+                    </button>
+
+                    <a id="university-support-link" href="#" hidden>
+                        University mental-health support
+                    </a>
+
+                    <a id="book-support-link" href="#" hidden>
+                        Find professional support
+                    </a>
+
+                    <a id="urgent-support-link" href="#" hidden>
+                        View urgent support
+                    </a>
                 </div>
-            </article>
 
-            <article class="dashboard-card small-card">
-                <h2>Quick Resources</h2>
-
-                <a href="#">Breathing exercise</a>
-                <a href="#">Study stress tips</a>
-                <a href="#">Campus support</a>
-            </article>
+                <p class="screening-disclaimer">
+                    This well-being result is informational and is not a
+                    medical diagnosis.
+                </p>
+            </div>
 
         </section>
 
-    </main>
 
-    <script src="Dashboard/dashboard.js"></script>
+
+            <section class="dashboard-card check-in-card">
+                <h2 id="title">Share How You’re Feeling</h2>
+
+                <p id="description" class="section-description">
+                    Tell Povi what has been on your mind lately. You can say whatever you want!
+                    Your friend Povi is always here listening to you!
+                </p>
+
+                <form id="povi-form" novalidate>
+
+                    <textarea id="student-message" name="message" placeholder="How's going?"></textarea>
+
+                    <button id="submit-button" type="submit" class="primary-button">
+                        Talk to Povi
+                    </button>
+                </form>
+            </section>
+
+            <section class="dashboard-card">
+                <h2>Povi’s Support</h2>
+
+                <div id="povi-response" class="support-message">
+                    <div class="support-icon">♡</div>
+
+                    <div>
+                        <h3>You are not alone</h3>
+
+                        <p>
+                            Povi will provide supportive suggestions here
+                            after you submit your check-in.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="dashboard-grid">
+
+                <article class="dashboard-card small-card">
+
+
+
+
+                </article>
+
+                <article class="dashboard-card small-card">
+                    <h2>Quick Resources</h2>
+
+                    <a href="#">Breathing exercise</a>
+                    <a href="#">Study stress tips</a>
+                    <a href="#">Campus support</a>
+                </article>
+
+            </section>
+
+        </main>
+
+        <script src="Dashboard/dashboard.js"></script>
 </body>
+
 </html>

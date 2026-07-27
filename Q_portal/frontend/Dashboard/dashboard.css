@@ -21,6 +21,12 @@ body {
 
     background: #ffffff;
     border-bottom: 1px solid #dddddd;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    z-index: 1000;
 }
 
 .brand-link {
@@ -31,12 +37,14 @@ body {
 .brand {
     /*By default, Flexbox arranges the direct children in a row from left to right.*/
     display: flex;
+    margin-left: -70px;
     gap: 14px;
+   
 }
 
 .brand-icon {
-    width: 48px;
-    height: 48px;
+    width: 58px;
+    height: 58px;
 
     display: flex;
     justify-content: center;
@@ -59,8 +67,8 @@ body {
 
 .dashboard-navigation {
     display: flex;
-    align-items: center;
-    gap: 12px;
+    gap: 18px;
+    margin-right: -68px;
 }
 
 .dashboard-navigation select,
@@ -68,7 +76,7 @@ body {
 .support-button {
     min-height: 44px;
     padding: 0 18px;
-
+  
     border: 1px solid #dddddd;
     border-radius: 8px;
 
@@ -103,9 +111,245 @@ body {
     color: #ffffff;
 }
 
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+
+    background-color: rgba(0, 0, 0, 0.5);
+
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.show {
+    display: flex;
+}
+
+
+.modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 450px;
+
+    padding: 30px;
+    border-radius: 15px;
+
+    background-color: white;
+    text-align: center;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+
+.mood-options {
+    display: flex;
+    justify-content: center; /* centers the whole row */
+    align-items: center;
+    gap: 25px;
+    margin: 50px auto 30px;
+}
+
+
+
+/* Highlight selected mood */
+.mood-option.selected {
+    border: 3px solid #4caf50;
+    background-color: #e8f5e9;
+    transform: scale(1.08);
+    box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.15);
+}
+
+
+
+.mood-options button {
+    width: 48px;
+    height: 48px;
+
+    border: 1px solid #dddddd;
+    border-radius: 50%;
+    background: #ffffff;
+
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+
+    border: none;
+    background: none;
+
+    font-size: 28px;
+    cursor: pointer;
+}
+
+#continue-button {
+    margin-top: auto;
+    padding: 10px 25px;
+
+    border: none;
+    border-radius: 8px;
+
+    background-color: #4caf50;
+    color: white;
+
+    cursor: pointer;
+}
+
+
+.wellbeing-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.wellbeing-card-header p {
+    margin-top: 5px;
+    color: #707070;
+}
+
+
+
+.wellbeing-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    align-items: stretch;
+}
+
+.wellbeing-layout .dashboard-card {
+    margin-bottom: 28px;
+}
+
+.wellbeing-recommendation {
+    display: flex;
+    flex-direction: column;
+    min-height: 300px;
+}
+
+.wellbeing-recommendation h3 {
+    margin: 0 0 20px 0;
+}
+
+.recommendation-content {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#recommendation-message {
+    display: grid;
+    place-items: center;
+    line-height: 1.6;
+
+
+}
+
+.recommendation-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.screening-disclaimer {
+    margin-top: 100px;
+    align-self: flex-start;
+
+    color: #707070;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.wellbeing-recommendation[hidden] {
+    display: none;
+}
+
+
+@media (max-width: 900px) {
+    .wellbeing-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+#wellbeing-status {
+    padding: 7px 12px;
+    border-radius: 20px;
+    background: #e8f5e9;
+    color: #377c45;
+    font-size: 0.9rem;
+    font-weight: 600;
+    
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wellbeing-result {
+    margin-top: 25px;
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+}
+
+#wellbeing-score {
+    font-size: 3rem;
+    color: #377c45;
+}
+
+.wellbeing-result span {
+    color: #707070;
+}
+
+.wellbeing-progress {
+    width: 100%;
+    height: 12px;
+    margin-top: 18px;
+
+    overflow: hidden;
+    border-radius: 10px;
+    background: #e5e5e5;
+}
+
+#wellbeing-progress-bar {
+    width: 0;
+    height: 100%;
+
+    border-radius: 10px;
+    background: #4caf50;
+
+    transition: width 0.5s ease;
+}
+
+#wellbeing-description {
+    margin-top: 15px;
+    color: #707070;
+    line-height: 1.5;
+}
+
+
 .dashboard-main {
     width: min(1180px, 90%);
-    margin: 38px auto;
+    margin: 108px auto;
 }
 
 .dashboard-card {
@@ -130,7 +374,7 @@ body {
     line-height: 1.6;
 }
 
-#Povi-form label {
+#povi-form label {
     display: block;
     margin-bottom: 10px;
     font-weight: 600;
@@ -218,23 +462,6 @@ body {
     margin-bottom: 0;
 }
 
-.mood-options {
-    display: flex;
-    gap: 12px;
-    margin-top: 20px;
-}
-
-.mood-options button {
-    width: 48px;
-    height: 48px;
-
-    border: 1px solid #dddddd;
-    border-radius: 50%;
-    background: #ffffff;
-
-    font-size: 1.4rem;
-    cursor: pointer;
-}
 
 .small-card a {
     display: block;

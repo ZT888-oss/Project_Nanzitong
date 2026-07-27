@@ -210,7 +210,10 @@ async function login(username, password) {
 
     const data = await response.json();
 
-    if (!response.ok) {
+    if(response.ok){
+        sessionStorage.setItem("showLoginPopup", "true");
+    }
+    else if (!response.ok) {
         throw new Error(data.message || "Login failed.");
     }
 
