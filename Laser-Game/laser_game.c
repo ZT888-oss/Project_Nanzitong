@@ -112,7 +112,7 @@ const int hex_decoder_table[10] = {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x0
 bool lastBoxSpedUp = false;
 
 // Colors
-short int player_colour = 0x555; // Cyan
+short int player_colour = 0x555; 
 short int red = 0xF800;
 short int gray = 0x8410;
 short int black = 0x0;
@@ -170,7 +170,8 @@ enum Direction getDirection() {
 	
 	// If a key is pressed
 	if (RVALID) {
-
+    //Press and release both send PS/2 data. The program must recognize the release sequence so it doesn't 
+    // treat the released key's scan code as a new key press.
 		if (ignoreNegEdgeKey == true) {
 			ignoreNegEdgeKey = false;
 			return STILL;
@@ -462,7 +463,7 @@ bool checkCollision(int laserMatrix[320][240], struct playerInfo* player) {
     for (int x = -PLAYER_WALL_OFFSET; x <= PLAYER_WALL_OFFSET; x++) {
         for (int y = -PLAYER_WALL_OFFSET; y <= PLAYER_WALL_OFFSET; y++) {
             int checkX = player->x + x;
-            int checkY = player->y + y;
+            int checkY = player->y + y; 
             
             // Ensure within bounds before checking
             if (checkX >= 0 && checkX < 320 && checkY >= 0 && checkY < 240) {
@@ -501,7 +502,7 @@ void smartPlayerPosUpdate(struct playerInfo* player, enum Direction direction) {
 				player->y -= PLAYER_MOVE_Y;
 			}
 			break;
-		}
+		} 
 		
 		case (DOWN): {
 			if (player->y < (235 - PLAYER_WALL_OFFSET)) {
@@ -601,7 +602,7 @@ bool isFruitCollected(struct playerInfo* player, struct fruitInfo* fruit) {
 	return false;
 }
 
-// Display the start screen for Laser Rush
+
 void startScreen() {
 	plot_image_laser_rush(0, 0);
 	
@@ -619,50 +620,49 @@ void startScreen() {
 int get_spawn_marker_color() {
 	int spawnMarkerColor;
 
-	// Perform a write to address 0xFF202010 (snap_low) to read snapshot values
+
 	timer_ptr_1->snap_low = 0;
 
 	int currentTime = (timer_ptr_1->snap_high << 16) | timer_ptr_1->snap_low;
 
-	// If max number of boxes has been reached, stick to gray
+
 	if (currNumBoxes == MAX_NUM_BOXES) {
 		return gray;
 	}
 
-	// If timer for adding lasers is between 5 to 15 secs inclusive, return yellow
+
 	else if (currentTime >= 0x1DCD6500) {
 		return yellow;
 	}
 
-	// If time count is now below 10 seconds (is between 0 and 10 not inclusive), return red
-	// This will let player know that another laser will spawn soon.
+
 	else {
 		return magenta;
 	}
 }
 
 void initial_graphics_setup() {
-	/* set front pixel buffer to Buffer 1 */
-    *(pixel_ctrl_ptr + 1) = (int) &Buffer1; // first store the address in the back buffer
-    /* now, swap the front/back buffers, to set the front buffer location */
-    wait_for_vsync();
-    /* initialize a pointer to the pixel buffer, used by drawing functions */
+
+    *(pixel_ctrl_ptr + 1) = (int) &Buffer1; 
+
+    wait_for_vsync(); 
+    
     pixel_buffer_start = *pixel_ctrl_ptr;
     clear_screen(); // pixel_buffer_start points to the pixel buffer
 
-    /* set back pixel buffer to Buffer 2 */
+    
     *(pixel_ctrl_ptr + 1) = (int) &Buffer2;
     pixel_buffer_start = *(pixel_ctrl_ptr + 1); // we draw on the back buffer
     clear_screen(); // pixel_buffer_start points to the pixel buffer
 }
 
 void hex_decode_and_display(int num) {
-	// If the number is less than 10
+
 	if (num < 10) {
 		*(HEX_3_to_0) = hex_decoder_table[num];
 	}
 
-	// If the number is between 10 and 99 inclusive
+
 	else if ((num >= 10) && (num < 100)) {
 		int ones_digit = num % 10;
 		int tens_digit = num / 10;
@@ -670,7 +670,7 @@ void hex_decode_and_display(int num) {
 		*(HEX_3_to_0) = hex_decoder_table[ones_digit] | (hex_decoder_table[tens_digit] << 8);
 	}
 
-	// If the number is between 100 and 999 inclusive
+
 	else {
 		int ones_digit = num % 10;
 		int tens_digit = (num / 10) % 10;
@@ -710,10 +710,7 @@ void main_game() {
 	// Reset, set-up, and start timers 1 and 2
 	setup_and_start_timer_1();
 
-	// Reset score to 0
 	score = 0;
-
-	// Reset initial number of boxes to 2
 	currNumBoxes = 2;
 
 	// Reset speed-up box index to 0
@@ -737,7 +734,6 @@ void main_game() {
 	struct fruitInfo raspberryFruit = {150, 150};
 	struct fruitInfo tempRaspberry = raspberryFruit;
 	
-	// Initially create 2 boxes at random points within a square box of side length 50 centred on the screen.
 	for (int i = 0; i < currNumBoxes; i++) {
 		box[i].x = NEW_BOX_SPAWN_X - 25 + (rand() % 50);
 		box[i].y = NEW_BOX_SPAWN_Y - 25 + (rand() % 50);
@@ -781,7 +777,7 @@ void main_game() {
 
         plotPlayer(&player, player_colour);
 
-		// Erase the old fruit if collected before
+
 		if (orangeCollection == true) {
 			plotFruit(&tempOrange, black);
 			tempOrange = orangeFruit;
@@ -794,8 +790,7 @@ void main_game() {
 			raspberryCollection = false;
 		}
 
-		// If the fruit is collected, increment score (if less than 999), erase the fruit, and spawn a new one
-		// The flag orangeCollection or raspberryCollection is set to true to erase it in the next buffer as well in the next loop
+		
 		if (isFruitCollected(&player, &orangeFruit) == true) {
 			play_audio(eat_fruit_sound, eat_fruit_samples_num, 1, 1);
 			if (score < 999) {
@@ -825,14 +820,13 @@ void main_game() {
 
         movePlayer(&player);
 
-		// Move all boxes by 1 in the logic system
+
 		moveAllBox(box, currNumBoxes);
 		
 		// Visualize boxes at their new positions
 		plotAllBox(box, currNumBoxes, gray);
 
-		// If a laser will be added within 5 seconds and max num boxes hasn't been reached, highlight the moving box that it will be connected to
-		// The spawnpoint marker will be highlighted the same color
+		
 		if (currNumBoxes < MAX_NUM_BOXES) {
 			highlightImminentActionBox(box, magenta);
 		}
@@ -843,11 +837,11 @@ void main_game() {
 		// Visualize lines between the boxes
 		drawAllLine(box, currNumBoxes, red);
 		
-		// Swap buffers: boxes and lines are now displayed.
+
 		wait_for_vsync();
 		pixel_buffer_start = *(pixel_ctrl_ptr + 1);
 
-		// If a collision between the player and a laser is detected, quit the main game loop
+		
 		if (checkCollision(laserMatrix, &player) == true) {
 			play_audio(game_over_sound, game_over_samples_num, 1, 1);
 
@@ -861,7 +855,7 @@ void main_game() {
 				wait_for_vsync();
 				pixel_buffer_start = *(pixel_ctrl_ptr + 1);
 
-				// Wait for a second to pass, (wait for TO, then reset it)
+
 				while ((timer_ptr_2->status & 0x1) != 1);
 				timer_ptr_2->status = 0x0;
 				
@@ -869,7 +863,7 @@ void main_game() {
 				wait_for_vsync();
 				pixel_buffer_start = *(pixel_ctrl_ptr + 1);
 		
-				// Wait for a second to pass, (wait for TO, then reset it)
+			
 				while ((timer_ptr_2->status & 0x1) != 1);
 				timer_ptr_2->status = 0x0;
 			}
@@ -878,7 +872,7 @@ void main_game() {
 			pixel_buffer_start = *(pixel_ctrl_ptr + 1);
 			
 
-			// Return to main to display game-over text
+			
 			return;
 		}
 
@@ -891,12 +885,12 @@ void main_game() {
         // Erase previous player
         erasePreviousPlayerPos(prevPlayerPos);
 
-		// Check if 15 seconds has passed (TO bit is set to 1)
+		
 		if ((timer_ptr_1->status & 1) == 1) {
 			// Reset TO bit
 			timer_ptr_1->status = 0;
 
-			// Increase current number of boxes, if less than max number
+			
 			if (currNumBoxes < MAX_NUM_BOXES) {
 				currNumBoxes++;
 				play_audio(laser_adding_sound, laser_adding_samples_num, 1, 1);
@@ -907,8 +901,7 @@ void main_game() {
 				box[currNumBoxes-1].vel_x = randomVel();
 				box[currNumBoxes-1].vel_y = randomVel();
 			}
-			// If already at max number of boxes, initiate speed-up mechanic
-			// Each box will have its speed doubled at 15 sec intervals
+		
 			else if (lastBoxSpedUp == false) {
 				if (speed_up_box_index == 0) {
 					lastBoxSpedUp = true;
@@ -929,7 +922,6 @@ void main_game() {
 }
 
 gameOver() {
-	//plot game_pver
 	plot_image_game_over(0, 0);  // Display "Game Over"
 
 	// Switch buffers to show Game Over text
@@ -945,17 +937,13 @@ int main(void)
 	// Set up double-buffer system
 	initial_graphics_setup();
 
-	// Immediately display 0 on HEX displays, clearing the previous score if code was recompiled on board
 	hex_decode_and_display(0);
 
 	while (1) {
-		// Initiate start screen and wait for user to press enter to begin the game
 		startScreen();
 
-		// Begin main game logic (will return when player loses)
 		main_game();
 		
-		//display game over and wait for user to input
 		gameOver();
 
 		// Clear screen before showing start screen again
